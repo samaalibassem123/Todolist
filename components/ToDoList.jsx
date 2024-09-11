@@ -10,7 +10,6 @@ export default function ToDoList({ text, date , DeletIt, id }) {
           <span className="text-gray-500">{date}</span>
           <button className="border border-red-500 text-red-500 px-5 p-2 rounded-xl outline-none sm:hover:bg-red-500 sm:hover:text-white" onClick={()=>DeletIt(id)}>Delete</button>
         </div>
-
       </div>
     </div>
   )

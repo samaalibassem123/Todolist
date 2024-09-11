@@ -1,17 +1,31 @@
 "use client"
+import { Ma_Shan_Zheng } from "next/font/google";
 import React from "react";
 
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
 export default function AddForm({ AddTolist }) {
+
+  const ErrorPrompt = (msg)=>{
+    toast.error(msg)
+  }
+  const successPrompt = (msg)=>{
+    toast.success(msg)
+  }
 
   const HandleSubmit = async (e) => {
     e.preventDefault()
     const form = e.target;
     const text = form.text.value
     const date = form.date.value
+    if(text === "" || date === ""){
+      ErrorPrompt("Date or text is empty !")
+    }else{
+      successPrompt("Saved Succesfully !")
+    }
     AddTolist(text, date)
-    console.log(process.env.BACKEND_API_KEY)
     try {
-      await fetch(process.env.BACKEND_API_KEY+"/SaveToDo",
+      await fetch("http://localhost:8000/SaveToDo",
         {
           method: "POST",
           headers: {
@@ -20,7 +34,10 @@ export default function AddForm({ AddTolist }) {
           body:JSON.stringify({ text: text, date: date })
         }
       );
+      console.log("heuu")
     } catch (error) {
+      ErrorPrompt("Erreur in the server")
+      console.log(error)
       throw (error)
     }
 
@@ -33,6 +50,7 @@ export default function AddForm({ AddTolist }) {
       className="flex flex-col gap-5 bg-white rounded-b-lg p-5 shadow-2xl "
       onSubmit={HandleSubmit}
     >
+       <ToastContainer/>
       <input
         name="text"
         type="text"
@@ -52,6 +70,8 @@ export default function AddForm({ AddTolist }) {
       </div>
       <input
         type="submit"
+        value="submit"
+        
         className="hover:bg-black hover:text-white text-lg  p-2 rounded-lg w-[100px] outline-none border border-black cursor-pointer transition-all "
       />
     </form>
